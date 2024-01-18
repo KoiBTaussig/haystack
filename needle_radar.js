@@ -19,11 +19,11 @@ const radarPing = function(targetFile, directory, fs)
         //get the stats for this file
         const stats = fs.statSync(directory+"\\"+file);
 
-        //return condition
-        if (file.toLowerCase() == targetFile.toLowerCase()) return `Found it! needle is located at: ${directory}\\${targetFile}`;
+        //return condition, if a file is found with the desired name
+        if (file.toLowerCase() == targetFile.toLowerCase() && stats.isFile()) return `Found it! needle is located at: ${directory}\\${targetFile}`;
 
         //if the file is a directory, call function with that directory
-        if (stats.isDirectory()) needle = radarPing(targetFile, directory+"\\"+file, fs);
+        else if (stats.isDirectory()) needle = radarPing(targetFile, directory+"\\"+file, fs);
 
         //finally, if needle has been found stop recursing and get out of here
         if (needle) break fileParsing
