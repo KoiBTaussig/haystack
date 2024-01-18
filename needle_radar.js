@@ -1,12 +1,13 @@
 "use strict";
 
 
+//case insensitive
 //recursive function for finding the needle...
-//"pings" a folder, retrieving its contents.
+//"pings" a folder, retrieving its contents and searching for the target file.
 //then iterates over the contents and recurses with an updated directory for every folder iterated over
-const radarPing = function(directory, fs)
+const radarPing = function(targetFile, directory, fs)
 {
-    //where the needle will be stored and returned
+    //where the file will be stored and returned
     let needle;
 
     //read the directory
@@ -19,10 +20,10 @@ const radarPing = function(directory, fs)
         const stats = fs.statSync(directory+"\\"+file);
 
         //return condition
-        if (file.toLowerCase() == "needle.txt") return directory+"\\needle.txt";
+        if (file.toLowerCase() == targetFile.toLowerCase()) return `Found it! needle is located at: ${directory}\\${targetFile}`;
 
         //if the file is a directory, call function with that directory
-        if (stats.isDirectory()) needle = radarPing(directory+"\\"+file, fs);
+        if (stats.isDirectory()) needle = radarPing(targetFile, directory+"\\"+file, fs);
 
         //finally, if needle has been found stop recursing and get out of here
         if (needle) break fileParsing
@@ -37,6 +38,8 @@ const radarPing = function(directory, fs)
     const fs = require("fs");
 
     //start searching for the needle
-    let needle = radarPing(__dirname+"\\haystack", fs);
+    let needle = radarPing("needle.txt", __dirname+"\\haystack", fs);
+
+    //output result
     console.log(needle);
 }
