@@ -20,7 +20,7 @@ const radarPing = function(targetFile, directory, fs)
         const stats = fs.statSync(directory+"\\"+file);
 
         //return condition, if a file is found with the desired name
-        if (file.toLowerCase() == targetFile.toLowerCase() && stats.isFile()) return `Found it! needle is located at: ${directory}\\${targetFile}`;
+        if (file.toLowerCase() == targetFile.toLowerCase() && stats.isFile()) return `${directory}\\${targetFile}`;
 
         //if the file is a directory, call function with that directory
         else if (stats.isDirectory()) needle = radarPing(targetFile, directory+"\\"+file, fs);
@@ -38,8 +38,11 @@ const radarPing = function(targetFile, directory, fs)
     const fs = require("fs");
 
     //start searching for the needle
-    let needle = radarPing("needle.txt", __dirname+"\\haystack", fs);
+    let needlePath = radarPing("needle.txt", __dirname+"\\haystack", fs);
+
+    let needleContents = fs.readFileSync(needlePath, {encoding:"utf-8"});
 
     //output result
-    console.log(needle);
+    console.log(`Found it! Needle is located at: ${needlePath}`);
+    console.log(`File contents:\n${needleContents}`); //empty.... so sad
 }
