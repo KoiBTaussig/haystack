@@ -16,14 +16,16 @@ const radarPing = function(targetFile, directory, fs)
     //looping is so cheating... but this should work
     fileParsing:
     for (const file of files) {
+        //define the full path includin file name
+        const fileWithPath = directory+"\\"+file;
         //get the stats for this file
-        const stats = fs.statSync(directory+"\\"+file);
+        const stats = fs.statSync(fileWithPath);
 
         //return condition, if a file is found with the desired name
-        if (file.toLowerCase() == targetFile.toLowerCase() && stats.isFile()) return `${directory}\\${targetFile}`;
+        if (file.toLowerCase() == targetFile.toLowerCase() && stats.isFile()) return fileWithPath;
 
         //if the file is a directory, call function with that directory
-        else if (stats.isDirectory()) needle = radarPing(targetFile, directory+"\\"+file, fs);
+        else if (stats.isDirectory()) needle = radarPing(targetFile, fileWithPath, fs);
 
         //finally, if needle has been found stop recursing and get out of here
         if (needle) break fileParsing
